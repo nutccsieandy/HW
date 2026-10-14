@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulVibe AI - 你的專屬療癒小靈籤</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-gradient: linear-gradient(135deg, #f5f3ff 0%, #e0e7ff 100%);
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        p.subtitle {
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .question-box {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .question-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+            background: #f9fafb;
+            transition: border-color 0.2s;
+        }
+
+        select:focus {
+            border-color: var(--primary-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .result-box {
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-card {
+            background: #f3f4f6;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 5px solid var(--primary-color);
+            text-align: left;
+        }
+
+        .result-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e0e7ff;
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+        <!-- 測驗表單區 -->
+        <div id="form-section">
+            <h1>✨ SoulVibe AI 療癒小靈籤</h1>
+            <p class="subtitle">透過簡單的 3 個問題，讓 AI 為你生成今日專屬心靈處方箋</p>
+            
+            <div class="question-box">
+                <label for="q1">1. 你今天的心情色彩更接近哪一種？</label>
+                <select id="q1">
+                    <option value="1">薰衣草紫（平靜、思索）</option>
+                    <option value="2">暖陽黃（期待、活力）</option>
+                    <option value="3">深海藍（疲憊、沉靜）</option>
+                    <option value="4">森林綠（需要放鬆、呼吸）</option>
+                </select>
+            </div>
+
+            <div class="question-box">
+                <label for="q2">2. 目前最大的生活壓力來源是？</label>
+                <select id="q2">
+                    <option value="1">課業 / 專題研究與報告</option>
+                    <option value="2">未來職涯與不確定感</option>
+                    <option value="3">人際關係與社交疲勞</option>
+                    <option value="4">單純想放空、缺乏動力</option>
+                </select>
+            </div>
+
+            <div class="question-box">
+                <label for="q3">3. 現在最想瞬間移動到哪裡？</label>
+                <select id="q3">
+                    <option value="1">無人的安靜咖啡廳</option>
+                    <option value="2">海浪拍打的寧靜沙灘</option>
+                    <option value="3">涼爽的高山森林</option>
+                    <option value="4">舒適溫暖的被窩</option>
+                </select>
+            </div>
+
+            <button onclick="generateVibe()">生成我的專屬療癒處方</button>
+        </div>
+
+        <!-- 結果顯示區 -->
+        <div id="result-section" class="result-box">
+            <h1>🌿 你的 AI 療癒處方</h1>
+            <p class="subtitle">Vibe Coding 已經為你解讀完畢</p>
+            
+            <div class="result-card">
+                <span class="badge" id="result-badge">幸運指數：95%</span>
+                <h3 id="result-title">今日金句</h3>
+                <p id="result-text" style="font-size: 1.1rem; line-height: 1.6;"></p>
+            </div>
+
+            <button onclick="resetApp()" style="background-color: #6b7280;">重新測驗</button>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            {
+                title: "「慢下來，也是向前的一種方式。」",
+                text: "生活不需要時時刻刻都在全速運轉。允許自己今天稍微停下腳步，喝杯溫水，深呼吸，你已經做得很好了。"
+            },
+            {
+                title: "「風浪再大，你的內心依舊是一片平靜的海灣。」",
+                text: "面對繁雜的課業與挑戰，把眼光放回當下。一次解決一件事情，不必急著把全世界的重量都扛在肩上。"
+            },
+            {
+                title: "「允許自己空白，靈感與力量才會重新流動。」",
+                text: "疲憊時就去放空吧！去看看窗外的天空或聽一首喜歡的歌，大腦需要休息，才能長出更好的創意與能量。"
+            },
+            {
+                title: "「每一步微小的努力，都在為未來蓄積光芒。」",
+                text: "你現在所付出的點滴累積，終將在最適當的時候開花結果。相信自己的步伐，穩穩地走下去。"
+            }
+        ];
+
+        function generateVibe() {
+            // 隨機選取一則金句（實際可根據選擇進行演算法對應）
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            const selected = quotes[randomIndex];
+            
+            const randomPercent = Math.floor(Math.random() * 15) + 85; // 85% - 99%
+
+            document.getElementById('result-badge').innerText = `今日幸運指數：${randomPercent}%`;
+            document.getElementById('result-title').innerText = selected.title;
+            document.getElementById('result-text').innerText = selected.text;
+
+            // 切換畫面
+            document.getElementById('form-section').style.display = 'none';
+            document.getElementById('result-section').style.display = 'block';
+        }
+
+        function resetApp() {
+            document.getElementById('result-section').style.display = 'none';
+            document.getElementById('form-section').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
